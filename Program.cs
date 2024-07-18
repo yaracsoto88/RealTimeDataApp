@@ -8,6 +8,7 @@ using RealTimeDataApp.Infrastructure.Repositories;
 using RealTimeDataApp.BusinessLogic.Interfaces;
 using RealTimeDataApp.BusinessLogic.Services;
 using Microsoft.Extensions.Configuration;
+using RealTimeDataApp.Infrastructure.BackgroundServices;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((context, services) =>
@@ -18,7 +19,7 @@ IHost host = Host.CreateDefaultBuilder(args)
 
         // Capa de Infraestructura
         services.AddScoped<IDataModelRepository, DataModelRepository>();
-        // services.AddHttpClient<ApiService>();
+        services.AddHttpClient<ApiService>();
 
         // Capa de Lógica de Negocio
         services.AddScoped<IDataModelBusinessLogic, DataModelBusinessLogic>();
@@ -27,7 +28,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddScoped<IDataModelService, DataModelService>();
 
         // Servicios Hospedados
-        // services.AddHostedService<DataHostedService>();
+        services.AddHostedService<DataHostedService>();
     })
     .Build();
 
