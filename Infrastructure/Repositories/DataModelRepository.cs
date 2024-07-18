@@ -12,11 +12,13 @@ namespace RealTimeDataApp.Infrastructure.Repositories
         {
             _context = context;
         }
-        public async Task AddDataModelAsync(DataModel dataModel){
-            //
+        public async Task AddDataModelAsync(DataModel dataModel)
+        {
+            _context.DataModels.Add(dataModel);
+            await _context.SaveChangesAsync();
         }
         public async Task <IEnumerable<DataModel>> GetAllDataModelsAsync(){
-        
+            
             return null;
         }
     }   

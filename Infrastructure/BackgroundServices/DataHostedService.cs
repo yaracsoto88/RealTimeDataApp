@@ -1,6 +1,11 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using RealTimeDataApp.Application.Mappers;
 using RealTimeDataApp.Application.Services;
+using RealTimeDataApp.Application.DTOs;
+using RealTimeDataApp.Domain.Interfaces;
+
 
 namespace RealTimeDataApp.Infrastructure.BackgroundServices
 {
@@ -8,12 +13,16 @@ namespace RealTimeDataApp.Infrastructure.BackgroundServices
     {
         private readonly ILogger<DataHostedService> _logger;
         private readonly ApiService _apiService;
-        
+        private readonly DataModelMapper _mapper;
+        private readonly IDataModelService _dataModelService;
+
         private Timer? _timer = null;
-        public DataHostedService(ILogger<DataHostedService> logger, ApiService apiService)
+        public DataHostedService(ILogger<DataHostedService> logger, ApiService apiService, DataModelMapper mapper, IDataModelService dataModelService)
         {
             _logger = logger;
             _apiService = apiService;
+            _mapper = mapper;
+            _dataModelService = dataModelService;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -28,12 +37,25 @@ namespace RealTimeDataApp.Infrastructure.BackgroundServices
         private async void DoWork(object? state)
         {
             _logger.LogInformation("Data Hosted Service is working.");
-            // lógica de la tarea en segundo plano
-            //guardo los datos de la api en data
-            var data = await _apiService.GetDataAsync("https://jsonplaceholder.typicode.com/posts");
-            _logger.LogInformation("Data: {data}", data);
-            //y ahora quiero que data este almacenada en memoria
 
+            try
+            {
+                var data = await _apiService.GetDataAsync("https://jsonplaceholder.typicode.com/posts");
+                _logger.LogInformation("Data: {data}", data);
+
+                var dataModels = JsonConvert.DeserializeObject<List<DataModelDto>>(data);
+
+                foreach (var dataModelDto in dataModels)
+                {
+                    var dataModel = _mapper.DtoToModel(dataModelDto);
+                    await _dataModelService.AddDataModelAsync(dataModelDto);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while calling the API.");
+            }
         }
 
         public void Dispose()
