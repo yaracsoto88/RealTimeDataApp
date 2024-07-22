@@ -4,7 +4,7 @@ namespace RealTimeDataApp.Domain.Entities
     {
         public int Id { get; set; }
         public DateTime TimeStamp { get; set; }
-        public string Value { get; set; }
+        public string? Value { get; set; }
         
     }
 }

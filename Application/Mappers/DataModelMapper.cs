@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using RealTimeDataApp.Application.DTOs;
 using RealTimeDataApp.Domain.Entities;
 
@@ -14,8 +10,8 @@ namespace RealTimeDataApp.Application.Mappers
             return new DataModelDto
             {
                 Id = dataModel.Id,
-                TimeStamp = dataModel.TimeStamp,
-                Value = dataModel.Value
+                Title = dataModel.TimeStamp.ToString(),
+                Body = dataModel.Value
             };
         }
 
@@ -24,17 +20,17 @@ namespace RealTimeDataApp.Application.Mappers
             return new DataModel
             {
                 Id = dataModelDto.Id,
-                TimeStamp = dataModelDto.TimeStamp,
-                Value = dataModelDto.Value
+                TimeStamp = DateTime.UtcNow,
+                Value = dataModelDto.Body
             };
         }
 
+      
         public void UpdateModel(DataModel existingModel, DataModelDto dto)
-    {
-        existingModel.Id= dto.Id;
-        existingModel.Value = dto.Value;
-        // Actualizar otras propiedades según sea necesario
-    }
+        {
+            existingModel.TimeStamp = DateTime.UtcNow;
+            existingModel.Value = dto.Body;
+        }
 
     }
 }

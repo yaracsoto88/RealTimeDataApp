@@ -5,9 +5,6 @@ using RealTimeDataApp.Application.Mappers;
 using RealTimeDataApp.Application.Services;
 using RealTimeDataApp.Application.DTOs;
 using RealTimeDataApp.Domain.Interfaces;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace RealTimeDataApp.Infrastructure.BackgroundServices
 {
