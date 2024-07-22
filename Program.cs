@@ -19,7 +19,6 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddHttpClient<ApiService>();
         services.AddScoped<IDataModelService, DataModelService>();
         services.AddScoped<DataModelMapper>();
-        services.AddScoped<InMemoryDataStore>();
         services.AddHostedService<DataHostedService>();
 
     })

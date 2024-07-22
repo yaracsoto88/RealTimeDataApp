@@ -30,6 +30,5 @@ namespace RealTimeDataApp.Application.Mappers
             existingModel.TimeStamp = DateTime.UtcNow;
             existingModel.Value = dto.Body;
         }
-
     }
 }

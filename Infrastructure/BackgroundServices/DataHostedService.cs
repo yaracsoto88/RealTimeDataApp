@@ -12,15 +12,13 @@ namespace RealTimeDataApp.Infrastructure.BackgroundServices
     {
         private readonly ILogger<DataHostedService> _logger;
         private readonly ApiService _apiService;
-        private readonly DataModelMapper _mapper;
         private readonly IDataModelService _dataModelService;
-
         private Timer? _timer = null;
-        public DataHostedService(ILogger<DataHostedService> logger, ApiService apiService, DataModelMapper mapper, IDataModelService dataModelService)
+        
+        public DataHostedService(ILogger<DataHostedService> logger, ApiService apiService, IDataModelService dataModelService)
         {
             _logger = logger;
             _apiService = apiService;
-            _mapper = mapper;
             _dataModelService = dataModelService;
         }
 

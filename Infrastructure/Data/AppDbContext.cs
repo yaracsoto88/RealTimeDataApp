@@ -14,6 +14,5 @@ namespace RealTimeDataApp.Infrastructure.Data
             modelBuilder.Entity<DataModel>().ToTable("DataModels");
             modelBuilder.Entity<DataModel>().HasKey(x => x.Id);
         }
-
     }
 }

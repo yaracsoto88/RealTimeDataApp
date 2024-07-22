@@ -7,5 +7,4 @@ namespace RealTimeDataApp.Application.DTOs
         public string? Title { get; set; }
         public string? Body { get; set; }
     }
-
 }
