@@ -26,7 +26,6 @@ namespace RealTimeDataApp.Infrastructure.BackgroundServices
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            // Iniciar el servicio
             _logger.LogInformation("DataHostedService is starting.");
             _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
             return Task.CompletedTask;
@@ -45,13 +44,13 @@ namespace RealTimeDataApp.Infrastructure.BackgroundServices
 
                 foreach (var dataModelDto in dataModels)
                 {
-                    var dataModel = _mapper.DtoToModel(dataModelDto);
+                    var dataModel = DataModelMapper.DtoToModel(dataModelDto);
                     var existingDataModel = await _dataModelService.GetDataModelByIdAsync(dataModel.Id);
 
                     if (existingDataModel != null)
                     {
                         // Actualizar entidad existente
-                        _mapper.UpdateModel(existingDataModel, dataModelDto);
+                        DataModelMapper.UpdateModel(existingDataModel, dataModelDto);
                         await _dataModelService.UpdateDataModelAsync(existingDataModel);
                     }
                     else
@@ -69,13 +68,11 @@ namespace RealTimeDataApp.Infrastructure.BackgroundServices
 
         public void Dispose()
         {
-            // Descargar recursos
             _timer?.Dispose();
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            // Detener el servicio
             _logger.LogInformation("DataHostedService is stopping.");
             _timer?.Change(Timeout.Infinite, 0);
             return Task.CompletedTask;

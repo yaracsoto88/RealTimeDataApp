@@ -15,7 +15,7 @@ namespace RealTimeDataApp.Application.Mappers
             };
         }
 
-        public DataModel DtoToModel(DataModelDto dataModelDto)
+        public static DataModel DtoToModel(DataModelDto dataModelDto)
         {
             return new DataModel
             {
@@ -25,8 +25,7 @@ namespace RealTimeDataApp.Application.Mappers
             };
         }
 
-      
-        public void UpdateModel(DataModel existingModel, DataModelDto dto)
+        public static void UpdateModel(DataModel existingModel, DataModelDto dto)
         {
             existingModel.TimeStamp = DateTime.UtcNow;
             existingModel.Value = dto.Body;
