@@ -29,5 +29,12 @@ namespace RealTimeDataApp.Application.Mappers
             };
         }
 
+        public void UpdateModel(DataModel existingModel, DataModelDto dto)
+    {
+        existingModel.Id= dto.Id;
+        existingModel.Value = dto.Value;
+        // Actualizar otras propiedades según sea necesario
+    }
+
     }
 }

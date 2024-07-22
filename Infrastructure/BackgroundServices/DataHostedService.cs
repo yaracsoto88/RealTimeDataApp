@@ -5,7 +5,9 @@ using RealTimeDataApp.Application.Mappers;
 using RealTimeDataApp.Application.Services;
 using RealTimeDataApp.Application.DTOs;
 using RealTimeDataApp.Domain.Interfaces;
-
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace RealTimeDataApp.Infrastructure.BackgroundServices
 {
@@ -31,7 +33,6 @@ namespace RealTimeDataApp.Infrastructure.BackgroundServices
             _logger.LogInformation("DataHostedService is starting.");
             _timer = new Timer(DoWork, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
             return Task.CompletedTask;
-
         }
 
         private async void DoWork(object? state)
@@ -48,9 +49,20 @@ namespace RealTimeDataApp.Infrastructure.BackgroundServices
                 foreach (var dataModelDto in dataModels)
                 {
                     var dataModel = _mapper.DtoToModel(dataModelDto);
-                    await _dataModelService.AddDataModelAsync(dataModelDto);
-                }
+                    var existingDataModel = await _dataModelService.GetDataModelByIdAsync(dataModel.Id);
 
+                    if (existingDataModel != null)
+                    {
+                        // Actualizar entidad existente
+                        _mapper.UpdateModel(existingDataModel, dataModelDto);
+                        await _dataModelService.UpdateDataModelAsync(existingDataModel);
+                    }
+                    else
+                    {
+                        // Añadir nueva entidad
+                        await _dataModelService.AddDataModelAsync(dataModelDto);
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -60,7 +72,7 @@ namespace RealTimeDataApp.Infrastructure.BackgroundServices
 
         public void Dispose()
         {
-            //descargar recursos
+            // Descargar recursos
             _timer?.Dispose();
         }
 
